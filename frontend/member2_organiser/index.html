@@ -1,0 +1,968 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>EventHub | Management Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../shared/theme.css">
+    <link rel="stylesheet" href="../shared/sidebar-cleanup.css">
+    
+<style>
+/* EventHub Admin — Dark Theme Override */
+
+/* Page */
+html,
+body,
+body > main,
+body > .main-content {
+    background: #0c0c15 !important;
+    color: #ffffff !important;
+}
+
+/* Sidebar: fixed directly below shared navbar */
+body > .sidebar {
+    position: fixed !important;
+    top: 70px !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 225px !important;
+    height: calc(100vh - 70px) !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 28px 16px !important;
+    background: #14121f !important;
+    border-right: 1px solid #383745 !important;
+    color: #ffffff !important;
+    overflow-y: auto !important;
+    z-index: 20 !important;
+}
+
+/* Hide duplicate sidebar branding */
+.sidebar .brand,
+.sidebar .brand-icon,
+.sidebar .sidebar-bottom {
+    display: none !important;
+}
+
+.sidebar .nav-label {
+    color: #a5a4b5 !important;
+    margin: 0 0 18px 12px !important;
+}
+
+/* Sidebar links */
+.sidebar .nav-item {
+    display: flex !important;
+    align-items: center !important;
+    color: #c4bfd3 !important;
+    background: transparent !important;
+    margin: 4px 0 !important;
+    padding: 13px 14px !important;
+    border-radius: 10px !important;
+}
+
+.sidebar .nav-item.active {
+    background: #393053 !important;
+    color: #d4c7ff !important;
+}
+
+/* Dashboard area */
+body > .main-content {
+    margin-left: 225px !important;
+    width: calc(100% - 225px) !important;
+    max-width: none !important;
+    padding: 35px 32px !important;
+    min-height: calc(100vh - 70px) !important;
+    box-sizing: border-box !important;
+}
+
+/* Cards and panels */
+.main-content .stat-card,
+.main-content .panel,
+.main-content .access-message {
+    background: #181824 !important;
+    border: 1px solid #383745 !important;
+    color: #ffffff !important;
+}
+
+/* Headings */
+.main-content h1,
+.main-content h2,
+.main-content h3,
+.main-content strong {
+    color: #ffffff !important;
+}
+
+/* Secondary text */
+.main-content p,
+.main-content small,
+.main-content .subtitle,
+.main-content .footnote {
+    color: #a5a4b5 !important;
+}
+
+/* Preserve purple welcome banner */
+.main-content .welcome-card {
+    background: linear-gradient(
+        115deg,
+        #4a347a,
+        #6550ae,
+        #8569e4
+    ) !important;
+}
+
+.main-content .welcome-card h2,
+.main-content .welcome-card p {
+    color: #ffffff !important;
+}
+
+/* Event management table */
+.main-content table {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+.main-content th {
+    background: #282338 !important;
+    color: #d4c7ff !important;
+}
+
+.main-content td {
+    color: #e7e2f2 !important;
+    border-bottom: 1px solid #383745 !important;
+}
+
+/* Inputs */
+.main-content input,
+.main-content select,
+.main-content textarea {
+    background: #232333 !important;
+    color: #ffffff !important;
+    border: 1px solid #383745 !important;
+}
+
+/* Mobile */
+@media (max-width: 850px) {
+    body > .sidebar {
+        position: relative !important;
+        top: auto !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    body > .main-content {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+}
+</style>
+
+
+    <style>
+        .workspace-view[hidden],
+        #managementAuth[hidden] {
+            display: none !important;
+        }
+
+        .main-content {
+            width: calc(100% - 245px);
+            max-width: none;
+            margin-left: 245px;
+            padding: 35px;
+            min-width: 0;
+        }
+
+        .sidebar {
+            z-index: 2;
+        }
+
+        .sidebar .nav-item {
+            display: block;
+            cursor: pointer;
+        }
+
+        .sidebar .nav-item:hover {
+            background: #302747;
+            color: #d4c7ff;
+        }
+
+        .sidebar .nav-item.active {
+            background: #393053;
+            color: #d4c7ff;
+        }
+
+        /* Top navbar login/logout */
+        #managementAuth {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        #managementWelcome {
+            color: #d4c7ff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        #managementAuth .btn {
+            padding: 9px 15px;
+            font-size: 12px;
+        }
+
+        /* Login modal */
+        .management-modal[hidden] {
+            display: none !important;
+        }
+
+        .management-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,.78);
+            padding: 20px;
+        }
+
+        .management-modal-card {
+            width: 100%;
+            max-width: 440px;
+            background: #1c1b2b;
+            border: 1px solid #383745;
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            color: #fff;
+        }
+
+        .management-modal-card h2 {
+            margin: 10px 0;
+            font-size: 30px;
+        }
+
+        .management-modal-card p {
+            color: #a5a4b5;
+            line-height: 1.6;
+        }
+
+        .management-modal-card label {
+            display: block;
+            margin: 18px 0 8px;
+            font-size: 13px;
+        }
+
+        .management-modal-card input {
+            width: 100%;
+            padding: 13px;
+            border-radius: 9px;
+            background: #232333;
+            border: 1px solid #383745;
+            color: white;
+        }
+
+        .management-modal-card button[type="submit"] {
+            width: 100%;
+            margin-top: 22px;
+        }
+
+        #closeManagementLogin {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            border: none;
+            background: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        #managementLoginError {
+            color: #ff9caa;
+            font-size: 13px;
+        }
+
+        /* Access restriction message */
+        .access-message {
+            background: #181824;
+            border: 1px solid #383745;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 25px;
+        }
+
+        .access-message h2 {
+            margin-top: 0;
+        }
+
+        .access-message p {
+            color: #a5a4b5;
+        }
+
+        .access-message[hidden] {
+            display: none !important;
+        }
+
+        /* Venue workspace */
+        .venue-workspace-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .venue-workspace-heading h1 {
+            margin: 8px 0;
+        }
+
+        .venue-portal-container {
+            width: 100%;
+            overflow: visible;
+        }
+
+        #venueFrame {
+            display: block;
+            width: 100%;
+            min-height: 650px;
+            border: none;
+            background: transparent;
+        }
+
+        .workspace-note {
+            margin-top: 20px;
+            color: #a5a4b5;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        /* Event form */
+        #eventForm {
+            margin: 18px 0;
+            padding: 22px;
+            background: #232036;
+            border: 1px solid #383745;
+            border-radius: 14px;
+        }
+
+        #eventForm[hidden] {
+            display: none !important;
+        }
+
+        #eventForm input,
+        #eventForm select {
+            min-width: 0;
+            flex: 1;
+            background: #232333;
+            color: white;
+            border: 1px solid #383745;
+            border-radius: 9px;
+            padding: 12px;
+        }
+
+        #eventForm .toolbar {
+            flex-wrap: wrap;
+        }
+
+        .event-action {
+            margin: 3px;
+            padding: 9px 12px;
+        }
+
+        @media (max-width: 850px) {
+            .main-content {
+                width: 100%;
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .venue-workspace-heading {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP RIGHT AUTHENTICATION -->
+    <div id="managementAuth" hidden>
+        <span id="managementWelcome"></span>
+
+        <button type="button"
+                id="managementLoginBtn"
+                class="btn btn-outline">
+            Login
+        </button>
+
+        <button type="button"
+                id="managementLogoutBtn"
+                class="btn btn-outline"
+                hidden>
+            Logout
+        </button>
+    </div>
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+
+        <p class="nav-label">WORKSPACE</p>
+
+        <a href="#dashboard"
+           class="nav-item active"
+           id="dashboardNav">
+            ▦ Dashboard
+        </a>
+
+        <a href="#venues"
+           class="nav-item"
+           id="venueNav">
+            ▣ Venue Management
+        </a>
+
+    </aside>
+
+    <!-- VIEW 1: EVENT MANAGEMENT -->
+    <main class="main-content workspace-view"
+          id="dashboard">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">EVENT MANAGEMENT</p>
+                <h1>Organiser Dashboard</h1>
+                <p class="subtitle">
+                    Manage your events from one place.
+                </p>
+            </div>
+
+            <span class="status-pill">
+                ● API Dashboard
+            </span>
+        </header>
+
+        <section class="welcome-card">
+            <div>
+                <p class="eyebrow light">YOUR WORKSPACE</p>
+                <h2>Make every event count.</h2>
+                <p>
+                    View your event listings and keep
+                    your information up to date.
+                </p>
+            </div>
+
+            <div class="welcome-symbol">✦</div>
+        </section>
+
+        <!-- Access message before login -->
+        <section id="eventAccess" class="access-message">
+            <h2>Welcome to EventHub Management</h2>
+            <p>
+                Please log in using your administrator
+                or organiser account to manage events.
+            </p>
+            <button class="btn btn-primary"
+                    type="button"
+                    id="eventLoginPrompt">
+                Login to Continue
+            </button>
+        </section>
+
+        <div id="eventContent" hidden>
+
+            <section class="stats-grid">
+
+                <article class="stat-card">
+                    <span class="stat-icon purple">▣</span>
+                    <p>Total Events Loaded</p>
+                    <h2 id="totalEvents">—</h2>
+                    <small>Records returned by the API</small>
+                </article>
+
+                <article class="stat-card">
+                    <span class="stat-icon green">✓</span>
+                    <p>API Connection</p>
+                    <h2 id="apiStatus">Not connected</h2>
+                    <small id="apiMessage">
+                        Please log in
+                    </small>
+                </article>
+
+            </section>
+
+            <section class="panel" id="events">
+
+                <div class="panel-heading">
+                    <div>
+                        <h2>Event Management</h2>
+                        <p>
+                            Manage events through
+                            the shared PHP REST API.
+                        </p>
+                    </div>
+
+                    <button class="btn btn-primary"
+                            id="refreshBtn"
+                            type="button">
+                        ↻ Refresh Events
+                    </button>
+                </div>
+
+                <div class="toolbar">
+                    <button class="btn btn-primary"
+                            type="button"
+                            id="newEventBtn">
+                        + Create Event
+                    </button>
+
+                    <span id="signedInAs"
+                          style="align-self:center;
+                          color:#a88bff;font-weight:700">
+                    </span>
+                </div>
+
+                <!-- CREATE / EDIT EVENT -->
+                <form id="eventForm" hidden>
+
+                    <h3 id="eventFormTitle">
+                        Create Event
+                    </h3>
+
+                    <div class="toolbar">
+                        <input id="eventName"
+                               placeholder="Event name"
+                               maxlength="150"
+                               required>
+
+                        <input id="eventCategory"
+                               placeholder="Category"
+                               maxlength="100"
+                               required>
+                    </div>
+
+                    <div class="toolbar">
+                        <select id="eventVenue" required></select>
+
+                        <input id="eventPrice"
+                               type="number"
+                               min="0"
+                               step="0.01"
+                               placeholder="Ticket price (RM)"
+                               required>
+                    </div>
+
+                    <div class="toolbar">
+                        <input id="eventStart"
+                               type="datetime-local"
+                               required>
+
+                        <input id="eventEnd"
+                               type="datetime-local"
+                               required>
+                    </div>
+
+                    <div class="toolbar">
+                        <input id="eventDescription"
+                               placeholder="Event description">
+                    </div>
+
+                    <div class="toolbar">
+                        <button class="btn btn-primary"
+                                type="submit"
+                                id="saveEventBtn">
+                            Save Event
+                        </button>
+
+                        <button class="btn btn-dark"
+                                type="button"
+                                id="cancelEventBtn">
+                            Cancel
+                        </button>
+                    </div>
+
+                    <p id="editHint"
+                       style="color:#a5a4b5;font-size:12px">
+                    </p>
+
+                </form>
+
+                <!-- SEARCH -->
+                <div class="toolbar search-toolbar">
+                    <input id="searchInput"
+                           type="search"
+                           placeholder="Search loaded events...">
+
+                    <span id="resultCount">0 records</span>
+                </div>
+
+                <div id="notice"
+                     class="notice"
+                     role="status">
+                    Log in to load your events.
+                </div>
+
+                <!-- EVENT TABLE -->
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Event ID</th>
+                                <th>Event Name</th>
+                                <th>Organiser ID</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="eventTable">
+                            <tr>
+                                <td colspan="5" class="empty">
+                                    No events loaded.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="footnote">
+                    Organisers manage their own events.
+                    Administrators have broader permissions.
+                </p>
+            </section>
+
+        </div>
+
+        <footer>
+            EventHub Management Portal · Events
+        </footer>
+
+    </main>
+
+    <!-- VIEW 2: VENUE MANAGEMENT -->
+    <main class="main-content workspace-view"
+          id="venues"
+          hidden>
+
+        <header class="venue-workspace-heading">
+            <div>
+                <p class="eyebrow">VENUE MANAGEMENT</p>
+                <h1>Venue Dashboard</h1>
+                <p class="subtitle">
+                    Manage venue information and capacity.
+                </p>
+            </div>
+
+            <span class="status-pill">● Venue API</span>
+        </header>
+
+        <section id="venueAccess"
+                 class="access-message">
+            <h2>Venue Management</h2>
+            <p>
+                Log in as an administrator to manage venues.
+                Organisers may view available venue records.
+            </p>
+
+            <button class="btn btn-primary"
+                    id="venueLoginPrompt"
+                    type="button">
+                Login to Continue
+            </button>
+        </section>
+
+        <div id="venueContent" hidden>
+            <div class="venue-portal-container">
+                <iframe id="venueFrame"
+                        title="EventHub Venue Management"
+                        scrolling="no">
+                </iframe>
+            </div>
+
+            <p class="workspace-note">
+                Venue management is connected to the same
+                PHP REST API and MySQL database.
+                Create, update and delete operations
+                require administrator permissions.
+            </p>
+        </div>
+
+        <footer>
+            EventHub Management Portal · Venues
+        </footer>
+
+    </main>
+
+    <!-- LOGIN MODAL -->
+    <div id="managementLoginModal"
+         class="management-modal"
+         hidden>
+
+        <div class="management-modal-card">
+
+            <button id="closeManagementLogin"
+                    type="button"
+                    aria-label="Close login">
+                ×
+            </button>
+
+            <p class="eyebrow">MANAGEMENT ACCESS</p>
+            <h2>Welcome back.</h2>
+            <p>
+                Sign in with an admin or organiser account.
+            </p>
+
+            <form id="managementLoginForm">
+
+                <label for="loginEmail">
+                    Email Address
+                </label>
+
+                <input id="loginEmail"
+                       type="email"
+                       placeholder="you@example.com"
+                       autocomplete="username"
+                       required>
+
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <input id="loginPassword"
+                       type="password"
+                       placeholder="Enter your password"
+                       autocomplete="current-password"
+                       required>
+
+                <button type="submit"
+                        class="btn btn-primary"
+                        id="loginBtn">
+                    Login to EventHub
+                </button>
+
+            </form>
+
+            <p id="managementLoginError"
+               role="alert">
+            </p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="../shared/navigation.js"></script>
+
+    <!-- NAVIGATION / EMBEDDED VENUE LAYOUT -->
+    <script>
+    (function () {
+        "use strict";
+
+        const dashboardNav =
+            document.getElementById("dashboardNav");
+
+        const venueNav =
+            document.getElementById("venueNav");
+
+        const dashboard =
+            document.getElementById("dashboard");
+
+        const venues =
+            document.getElementById("venues");
+
+        const frame =
+            document.getElementById("venueFrame");
+
+        let frameLoaded = false;
+        let observer = null;
+
+        function resizeFrame() {
+            try {
+                const doc = frame.contentDocument;
+                if (!doc || !doc.body) return;
+
+                const height = Math.max(
+                    doc.body.scrollHeight,
+                    doc.documentElement.scrollHeight,
+                    650
+                );
+
+                frame.style.height =
+                    (height + 15) + "px";
+            } catch (e) {
+                console.warn("Frame resize error", e);
+            }
+        }
+
+        function styleVenueFrame() {
+            const doc = frame.contentDocument;
+            if (!doc || !doc.body) return;
+
+            const style = doc.createElement("style");
+
+            style.textContent = `
+                #eventhub-global-nav,
+                body > header,
+                #authPanel {
+                    display: none !important;
+                }
+
+                html, body {
+                    width: 100% !important;
+                    max-width: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    overflow-x: hidden !important;
+                    background: transparent !important;
+                }
+
+                body > main {
+                    width: 100% !important;
+                    max-width: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+
+                .dashboard,
+                .venue-section,
+                #venueFormSection {
+                    width: 100% !important;
+                    max-width: none !important;
+                    margin: 0 0 22px !important;
+                    padding: 24px !important;
+                    background: #181824 !important;
+                    border: 1px solid #383745 !important;
+                    border-radius: 16px !important;
+                    box-sizing: border-box !important;
+                }
+
+                #venueFormSection[hidden] {
+                    display: none !important;
+                }
+
+                .venue-section {
+                    overflow-x: auto !important;
+                }
+
+                .venue-section table {
+                    width: 100% !important;
+                    border-collapse: collapse !important;
+                }
+
+                .venue-section th,
+                .venue-section td {
+                    padding: 16px 12px !important;
+                    text-align: left !important;
+                    vertical-align: middle !important;
+                }
+
+                .edit-btn,
+                .delete-btn {
+                    display: inline-block !important;
+                    margin: 3px !important;
+                }
+
+                #venueForm input,
+                #venueForm select,
+                #venueForm textarea {
+                    width: 100% !important;
+                    box-sizing: border-box !important;
+                }
+
+                h1, h2, h3 {
+                    font-family: 'Outfit',
+                        sans-serif !important;
+                }
+            `;
+
+            doc.head.appendChild(style);
+
+            // Hide dynamically generated login panel.
+            const auth =
+                doc.getElementById("authLoggedOut") ||
+                doc.getElementById("authLoggedIn");
+
+            if (auth) {
+                const panel = auth.closest("section");
+                if (panel) {
+                    panel.style.display = "none";
+                }
+            }
+
+            if (observer) observer.disconnect();
+
+            observer = new ResizeObserver(resizeFrame);
+            observer.observe(doc.body);
+            observer.observe(doc.documentElement);
+
+            resizeFrame();
+        }
+
+        frame.addEventListener("load", styleVenueFrame);
+
+        window.reloadVenueWorkspace = function () {
+            if (frameLoaded) {
+                frame.contentWindow.location.reload();
+            }
+        };
+
+        window.openVenueWorkspace = function () {
+            if (!frameLoaded) {
+                frameLoaded = true;
+                frame.src = "../member3_venues/index.html";
+            } else {
+                resizeFrame();
+            }
+        };
+
+        function switchWorkspace() {
+            const showVenue = location.hash === "#venues";
+
+            dashboard.hidden = showVenue;
+            venues.hidden = !showVenue;
+
+            dashboardNav.classList.toggle(
+                "active", !showVenue
+            );
+
+            venueNav.classList.toggle(
+                "active", showVenue
+            );
+
+            if (showVenue &&
+                typeof window.updateManagementAccess === "function") {
+                window.updateManagementAccess();
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        dashboardNav.addEventListener("click", e => {
+            e.preventDefault();
+            location.hash = "#dashboard";
+            switchWorkspace();
+        });
+
+        venueNav.addEventListener("click", e => {
+            e.preventDefault();
+            location.hash = "#venues";
+            switchWorkspace();
+        });
+
+        window.addEventListener(
+            "hashchange",
+            switchWorkspace
+        );
+
+        switchWorkspace();
+    })();
+    </script>
+
+    <script src="../shared/management-cleanup.js"></script>
+
+</body>
+</html>

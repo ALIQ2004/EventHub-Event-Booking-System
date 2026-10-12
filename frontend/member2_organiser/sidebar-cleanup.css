@@ -1,0 +1,23 @@
+
+/*
+ EventHub Management - Clean Sidebar
+*/
+
+.sidebar .brand,
+.sidebar .sidebar-bottom {
+    display: none !important;
+}
+
+.sidebar {
+    padding-top: 28px !important;
+    justify-content: flex-start !important;
+}
+
+.sidebar .nav-label {
+    margin-top: 0 !important;
+    margin-bottom: 18px !important;
+}
+
+.sidebar .nav-item {
+    margin: 4px 0 !important;
+}

@@ -1,0 +1,30 @@
+
+# EventHub - Git Ignore
+
+# Local database and JWT configuration
+/backend/config/database.php
+/backend/config/jwt_config.php
+
+# Development authentication test
+/backend/api/test_jwt.php
+
+# Composer dependencies
+/backend/vendor/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# IDE and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Duplicate Member 4 folder
+/frontend/member3_venues/member4_tickets/

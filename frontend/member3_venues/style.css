@@ -1,0 +1,250 @@
+
+/* VENUE MANAGEMENT PORTAL - MEMBER 3 */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* HEADER */
+
+header {
+    background: #1e1b4b;
+    padding: 32px 8%;
+    border-bottom: 1px solid #4338ca;
+}
+
+header h1 {
+    font-size: 30px;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+header p {
+    color: #c4b5fd;
+}
+
+/* MAIN DASHBOARD */
+
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: 35px auto;
+}
+
+.dashboard {
+    background: linear-gradient(135deg, #312e81, #1e293b);
+    padding: 30px;
+    border-radius: 14px;
+    margin-bottom: 30px;
+    border: 1px solid #4338ca;
+}
+
+.dashboard h2 {
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.dashboard p {
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+/* BUTTONS */
+
+button {
+    padding: 11px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+#addVenueBtn,
+button[type="submit"] {
+    background: #7c3aed;
+    color: white;
+}
+
+#cancelBtn {
+    background: #475569;
+    color: white;
+    margin-left: 8px;
+}
+
+/* VENUE TABLE */
+
+.venue-section {
+    background: #1e293b;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid #334155;
+    overflow-x: auto;
+}
+
+.venue-section h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+thead {
+    background: #312e81;
+}
+
+th,
+td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+}
+
+th {
+    color: #ddd6fe;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+td {
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background: #334155;
+}
+
+/* STATUS BADGES */
+
+.status-available {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #064e3b;
+    color: #6ee7b7;
+    font-size: 12px;
+}
+
+.status-unavailable {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #7f1d1d;
+    color: #fecaca;
+    font-size: 12px;
+}
+
+/* TABLE ACTION BUTTONS */
+
+.edit-btn {
+    background: #2563eb;
+    color: white;
+    margin-right: 6px;
+}
+
+.delete-btn {
+    background: #dc2626;
+    color: white;
+}
+
+/* ADD / EDIT FORM */
+
+#venueFormSection {
+    width: 90%;
+    max-width: 700px;
+    margin: 30px auto 50px;
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 14px;
+    border: 1px solid #4338ca;
+}
+
+#venueFormSection[hidden] {
+    display: none;
+}
+
+#venueFormSection h2 {
+    margin-bottom: 22px;
+}
+
+#venueForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+label {
+    color: #cbd5e1;
+    font-weight: 500;
+    margin-top: 6px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: white;
+    font-size: 14px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #a78bfa;
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+#venueForm button[type="submit"] {
+    margin-top: 15px;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 768px) {
+    header {
+        padding: 24px 5%;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
+
+    main {
+        width: 95%;
+    }
+
+    .dashboard,
+    .venue-section,
+    #venueFormSection {
+        padding: 18px;
+    }
+}

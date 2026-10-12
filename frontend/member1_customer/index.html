@@ -1,0 +1,517 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>EventHub | Event Ticket Booking</title>
+
+    <!-- Member 1 styling -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Unified EventHub styling -->
+    <link rel="stylesheet" href="../shared/theme.css">
+
+    <!-- Customer booking functions -->
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+<!-- CUSTOMER LOGIN / LOGOUT CONTROLS -->
+<div id="customerAuthControls" class="hidden">
+
+    <span id="welcomeText"></span>
+
+    <button
+        id="loginNavBtn"
+        class="btn btn-outline"
+        type="button">
+        Login
+    </button>
+
+    <button
+        id="logoutBtn"
+        class="btn btn-outline hidden"
+        type="button">
+        Logout
+    </button>
+
+</div>
+
+<main>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                YOUR NEXT EXPERIENCE STARTS HERE
+            </div>
+
+            <h1>
+                Discover events.<br>
+                <span>Make memories.</span>
+            </h1>
+
+            <p>
+                Explore conferences, workshops, festivals and more.
+                Find your next experience and book your tickets
+                in just a few clicks.
+            </p>
+
+            <a href="#events" class="btn btn-primary">
+                Explore Events →
+            </a>
+
+        </div>
+
+        <div class="hero-art">
+
+            <div class="hero-symbol">✦</div>
+
+            <div class="hero-art-title">
+                LIVE THE<br>
+                EXPERIENCE
+            </div>
+
+            <div class="hero-art-bottom">
+                EVENTHUB / 2026
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features">
+
+        <div>
+            <strong>01</strong>
+            <span>Discover Events</span>
+        </div>
+
+        <div>
+            <strong>02</strong>
+            <span>Choose Your Tickets</span>
+        </div>
+
+        <div>
+            <strong>03</strong>
+            <span>Book Instantly</span>
+        </div>
+
+    </section>
+
+    <!-- UPCOMING EVENTS -->
+    <section class="events-section" id="events">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    WHAT'S HAPPENING
+                </span>
+
+                <h2>
+                    Upcoming <span>Events</span>
+                </h2>
+
+                <p>
+                    Find something worth looking forward to.
+                </p>
+
+            </div>
+
+            <div class="filter-area">
+
+                <input
+                    id="searchInput"
+                    type="search"
+                    placeholder="Search events..."
+                    aria-label="Search events">
+
+                <select
+                    id="categoryFilter"
+                    aria-label="Filter by category">
+
+                    <option value="all">
+                        All Categories
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div id="eventGrid" class="event-grid">
+            <p>Loading available events...</p>
+        </div>
+
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+
+        <span class="eyebrow">
+            ABOUT EVENTHUB
+        </span>
+
+        <h2>
+            Great experiences start with a simple booking.
+        </h2>
+
+        <p>
+            EventHub connects you to exciting events
+            and makes ticket reservations simple,
+            convenient and secure.
+        </p>
+
+    </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+
+    <strong>
+        Event<span>Hub.</span>
+    </strong>
+
+    <p>
+        Event Ticketing & Venue Booking System
+    </p>
+
+    <small>
+        © 2026 EventHub. Student Web API Project.
+    </small>
+
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal hidden" id="loginModal">
+
+    <div class="modal-panel login-panel">
+
+        <button
+            class="close-btn"
+            id="closeLogin"
+            type="button"
+            aria-label="Close login">
+            ×
+        </button>
+
+        <div class="eyebrow">
+            CUSTOMER ACCESS
+        </div>
+
+        <h2>Welcome back.</h2>
+
+        <p>
+            Log in to start booking your next experience.
+        </p>
+
+        <form id="loginForm">
+
+            <label for="email">
+                Email Address
+            </label>
+
+            <input
+                id="email"
+                type="email"
+                required
+                autocomplete="username"
+                placeholder="you@example.com">
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                id="password"
+                type="password"
+                required
+                autocomplete="current-password"
+                placeholder="Enter your password">
+
+            <button
+                type="submit"
+                class="btn btn-primary full">
+                Login to EventHub
+            </button>
+
+        </form>
+
+        <p
+            id="loginError"
+            class="error-text"
+            role="alert">
+        </p>
+
+    </div>
+
+</div>
+
+<!-- BOOKING MODAL -->
+<div class="modal hidden" id="bookingModal">
+
+    <div class="modal-panel">
+
+        <button
+            class="close-btn"
+            id="closeBooking"
+            type="button"
+            aria-label="Close booking">
+            ×
+        </button>
+
+        <div class="eyebrow">
+            RESERVE YOUR PLACE
+        </div>
+
+        <h2 id="bookingEventName">
+            Book Event
+        </h2>
+
+        <p id="bookingDescription"></p>
+
+        <form id="bookingForm">
+
+            <label for="scheduleSelect">
+                Event Schedule
+            </label>
+
+            <select
+                id="scheduleSelect"
+                required>
+            </select>
+
+            <p
+                id="availabilityText"
+                class="small-text">
+            </p>
+
+            <label for="ticketQuantity">
+                Number of Tickets
+            </label>
+
+            <input
+                id="ticketQuantity"
+                type="number"
+                min="1"
+                max="10"
+                value="1"
+                required>
+
+            <div class="total-row">
+
+                <span>Total Price</span>
+
+                <strong id="totalPrice">
+                    RM 0.00
+                </strong>
+
+            </div>
+
+            <button
+                type="submit"
+                id="confirmBookingBtn"
+                class="btn btn-primary full">
+                Confirm Booking
+            </button>
+
+        </form>
+
+        <p
+            id="bookingError"
+            class="error-text"
+            role="alert">
+        </p>
+
+    </div>
+
+</div>
+
+<!-- BOOKING CONFIRMATION -->
+<div class="modal hidden" id="confirmationModal">
+
+    <div class="modal-panel confirmation-panel">
+
+        <button
+            class="close-btn"
+            id="closeConfirmation"
+            type="button"
+            aria-label="Close confirmation">
+            ×
+        </button>
+
+        <div class="success-mark">
+            ✓
+        </div>
+
+        <div class="eyebrow">
+            RESERVATION COMPLETE
+        </div>
+
+        <h2>Booking Confirmed!</h2>
+
+        <p>
+            Your tickets have been reserved successfully.
+        </p>
+
+        <div class="receipt">
+
+            <div>
+                <span>Booking Reference</span>
+                <strong id="confirmationReference"></strong>
+            </div>
+
+            <div>
+                <span>Event</span>
+                <strong id="confirmationEvent"></strong>
+            </div>
+
+            <div>
+                <span>Total Paid / Payable</span>
+                <strong id="confirmationTotal"></strong>
+            </div>
+
+        </div>
+
+        <p class="small-text">
+            This confirms your ticket reservation.
+            No online payment has been processed.
+        </p>
+
+        <button
+            class="btn btn-primary full"
+            id="confirmationDone"
+            type="button">
+            Back to Events
+        </button>
+
+    </div>
+
+</div>
+
+<!-- NOTIFICATION -->
+<div
+    id="toast"
+    class="toast hidden"
+    role="status">
+</div>
+
+<!-- UNIFIED EVENTHUB NAVIGATION -->
+<script src="../shared/navigation.js"></script>
+
+<!-- PLACE AUTHENTICATION INSIDE TOP NAVBAR -->
+<script>
+(function () {
+
+    function attachCustomerAuth() {
+
+        const authControls =
+            document.getElementById(
+                "customerAuthControls"
+            );
+
+        if (!authControls) return;
+
+        // Search for the role badge generated
+        // by the shared navigation script.
+        const candidates = Array.from(
+            document.querySelectorAll("header *, nav *, .eh-nav *")
+        );
+
+        const roleBadge = candidates.find(element =>
+            element.children.length === 0 &&
+            element.textContent.trim().toUpperCase()
+                === "CUSTOMER"
+        );
+
+        if (roleBadge) {
+
+            // Replace the badge directly in the top navbar.
+            roleBadge.replaceWith(authControls);
+
+        } else {
+
+            // Fallback to the shared navbar.
+            const sharedNav =
+                document.querySelector(".eh-nav");
+
+            if (sharedNav) {
+                sharedNav.appendChild(authControls);
+            } else {
+                // Keep login accessible if shared nav fails.
+                document.body.prepend(authControls);
+            }
+        }
+
+        // Show authentication controls.
+        authControls.classList.remove("hidden");
+
+        authControls.style.cssText = `
+            display: flex !important;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-left: auto;
+            white-space: nowrap;
+        `;
+
+        // Welcome text.
+        const welcome =
+            document.getElementById("welcomeText");
+
+        if (welcome) {
+            welcome.style.cssText = `
+                color: #d4c7ff;
+                font-size: 13px;
+                font-weight: 600;
+                white-space: nowrap;
+            `;
+        }
+
+        // Login and Logout button styling.
+        ["loginNavBtn", "logoutBtn"].forEach(id => {
+
+            const button = document.getElementById(id);
+
+            if (button) {
+
+                button.style.cssText = `
+                    padding: 9px 16px;
+                    font-size: 12px;
+                    border-radius: 9px;
+                    white-space: nowrap;
+                `;
+
+            }
+        });
+    }
+
+    if (document.readyState === "loading") {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            attachCustomerAuth
+        );
+
+    } else {
+
+        attachCustomerAuth();
+
+    }
+
+})();
+</script>
+
+</body>
+</html>

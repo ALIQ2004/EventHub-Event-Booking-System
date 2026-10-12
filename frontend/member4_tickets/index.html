@@ -1,0 +1,457 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>EventHub | My Tickets</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../shared/theme.css">
+
+    <style>
+        /* Unified EventHub customer authentication */
+
+        [hidden] {
+            display: none !important;
+        }
+
+        #ticketNavAuth {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            grid-column: 3;
+            justify-self: end;
+            white-space: nowrap;
+        }
+
+        #currentUser {
+            color: #d4c7ff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        #ticketNavAuth button {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid #383745;
+            border-radius: 9px;
+            padding: 9px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        #ticketNavAuth button:hover {
+            border-color: #a88bff;
+            background: #232039;
+        }
+
+        /* Customer login popup */
+
+        #loginSection:not([hidden]) {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            width: 100%;
+            max-width: none;
+            border: none;
+            border-radius: 0;
+            background: rgba(0, 0, 0, 0.78);
+            overflow-y: auto;
+        }
+
+        #loginSection .login-box {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 32px;
+            background: #1c1b2b;
+            color: white;
+            border: 1px solid #383745;
+            border-radius: 20px;
+            box-shadow: 0 20px 70px #0008;
+        }
+
+        #loginSection h2 {
+            font-size: 32px;
+            margin: 10px 0;
+        }
+
+        #loginSection .muted {
+            color: #a5a4b5;
+            line-height: 1.7;
+        }
+
+        #loginSection form {
+            margin-top: 20px;
+        }
+
+        #loginSection label {
+            display: block;
+            margin: 15px 0 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        #loginSection input {
+            width: 100%;
+            padding: 13px;
+            background: #232333;
+            border: 1px solid #383745;
+            border-radius: 9px;
+            color: white;
+        }
+
+        #loginSection input:focus {
+            outline: none;
+            border-color: #a88bff;
+        }
+
+        #loginSection #loginBtn {
+            width: 100%;
+            margin-top: 24px;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #a88bff;
+            color: #12101d;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        #closeLoginBtn {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        #loginError {
+            color: #ff9caa;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        /* Match the unified EventHub page */
+
+        .container {
+            padding-top: 30px;
+        }
+
+        .hero {
+            border-radius: 20px;
+        }
+
+        .booking-card {
+            background: #181824;
+            border-color: #383745;
+        }
+
+        .booking-meta {
+            color: #a5a4b5;
+        }
+
+        .booking-meta strong {
+            color: #d4c7ff;
+        }
+
+        @media (max-width: 950px) {
+            #ticketNavAuth {
+                grid-column: 2;
+                grid-row: 1;
+            }
+        }
+
+        @media (max-width: 650px) {
+            #ticketNavAuth {
+                gap: 7px;
+            }
+
+            #currentUser {
+                font-size: 11px;
+            }
+        }
+    </style>
+
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+
+    <!-- LOGIN / LOGOUT FOR TOP EVENTHUB NAVBAR -->
+    <div id="ticketNavAuth" hidden>
+
+        <span id="currentUser"></span>
+
+        <button id="navLoginBtn" type="button">
+            Login
+        </button>
+
+        <button id="logoutBtn"
+                type="button"
+                hidden>
+            Logout
+        </button>
+
+    </div>
+
+    <!-- CUSTOMER LOGIN POPUP -->
+    <section id="loginSection"
+             class="login-panel"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="ticketLoginTitle"
+             hidden>
+
+        <div class="login-box">
+
+            <button id="closeLoginBtn"
+                    type="button"
+                    aria-label="Close login">
+                ×
+            </button>
+
+            <p class="eyebrow">CUSTOMER ACCESS</p>
+
+            <h2 id="ticketLoginTitle">
+                Welcome back.
+            </h2>
+
+            <p class="muted">
+                Log in to access your bookings
+                and digital tickets.
+            </p>
+
+            <form id="loginForm">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    required
+                    autocomplete="username">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password">
+
+                <button id="loginBtn"
+                        type="submit">
+                    Login to EventHub →
+                </button>
+
+            </form>
+
+            <p id="loginError" role="alert"></p>
+
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+
+        <!-- HERO -->
+        <section class="hero">
+
+            <div class="hero-label">
+                EVENT TICKETING PORTAL
+            </div>
+
+            <h1>
+                Your tickets, all in one place.
+            </h1>
+
+            <p>
+                Check your bookings, manage reservations
+                and view QR tickets for confirmed events.
+            </p>
+
+        </section>
+
+        <!-- CUSTOMER DASHBOARD -->
+        <section id="dashboardSection" hidden>
+
+            <div class="dashboard-title">
+
+                <div>
+                    <p class="eyebrow">
+                        YOUR DASHBOARD
+                    </p>
+
+                    <h2>My bookings</h2>
+                </div>
+
+                <button id="refreshBtn"
+                        class="secondary-btn"
+                        type="button">
+                    ↻ Refresh bookings
+                </button>
+
+            </div>
+
+            <!-- STATISTICS -->
+            <div class="stats">
+
+                <div class="stat">
+                    <span>Total bookings</span>
+                    <strong id="totalCount">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Confirmed</span>
+                    <strong id="confirmedCount">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Cancelled</span>
+                    <strong id="cancelledCount">0</strong>
+                </div>
+
+            </div>
+
+            <!-- BOOKING FILTER -->
+            <div class="toolbar">
+
+                <label for="statusFilter">
+                    Filter bookings
+                </label>
+
+                <select id="statusFilter">
+                    <option value="all">
+                        All bookings
+                    </option>
+                    <option value="confirmed">
+                        Confirmed
+                    </option>
+                    <option value="pending">
+                        Pending
+                    </option>
+                    <option value="cancelled">
+                        Cancelled
+                    </option>
+                </select>
+
+            </div>
+
+            <!-- BOOKINGS LOADED FROM PHP API -->
+            <div id="bookingList"
+                 class="booking-list">
+            </div>
+
+        </section>
+
+        <!-- LOGGED OUT PAGE CONTENT -->
+        <section id="loggedOutSection"
+                 class="panel">
+
+            <p class="eyebrow">
+                MY EVENTHUB
+            </p>
+
+            <h2>Manage your bookings.</h2>
+
+            <p class="muted">
+                Sign in with your customer account
+                to view reservations, booking status
+                and digital QR tickets.
+            </p>
+
+            <button id="pageLoginBtn"
+                    class="primary-btn"
+                    type="button">
+                Login to View Tickets
+            </button>
+
+        </section>
+
+        <!-- FEEDBACK -->
+        <div id="message"
+             class="message"
+             role="status"
+             aria-live="polite"
+             hidden>
+        </div>
+
+    </main>
+
+    <!-- DIGITAL QR TICKET -->
+    <dialog id="qrDialog" class="qr-dialog">
+
+        <div class="qr-content">
+
+            <button id="closeQrBtn"
+                    class="close-btn"
+                    type="button"
+                    aria-label="Close QR ticket">
+                ×
+            </button>
+
+            <p class="eyebrow">
+                DIGITAL TICKET
+            </p>
+
+            <h2 id="qrEventName">
+                Event ticket
+            </h2>
+
+            <div class="qr-frame">
+                <img id="qrImage"
+                     alt="QR code for booking ticket">
+            </div>
+
+            <p id="qrReference" class="ref"></p>
+
+            <p class="muted">
+                Show this QR code at the event.
+                Staff must verify the booking
+                in the system.
+            </p>
+
+            <button id="closeQrBottom"
+                    class="secondary-btn"
+                    type="button">
+                Close ticket
+            </button>
+
+        </div>
+
+    </dialog>
+
+    <!-- FOOTER -->
+    <footer>
+        EventHub · My Bookings & QR Tickets · 2026
+    </footer>
+
+    <!-- ONE SHARED EVENTHUB NAVBAR -->
+    <script src="../shared/navigation.js"></script>
+
+</body>
+</html>

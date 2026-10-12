@@ -1,0 +1,57 @@
+/* EventHub shared visual system; loaded AFTER each portal's original CSS */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+:root{--eh-bg:#0c0c15;--eh-surface:#181824;--eh-raised:#232333;--eh-border:#383745;--eh-purple:#a88bff;--eh-text:#fff;--eh-muted:#a5a4b5}
+body.eventhub-unified{background:var(--eh-bg)!important;color:var(--eh-text)!important;font-family:'DM Sans',Arial,sans-serif!important;min-height:100vh}
+body.eventhub-unified h1,body.eventhub-unified h2,body.eventhub-unified h3{font-family:'Outfit',Arial,sans-serif}
+#eventhub-global-nav{position:relative;z-index:1000;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px max(26px,7%);background:#0c0c15;border-bottom:1px solid #383745;color:#fff;font-family:'DM Sans',Arial,sans-serif}
+#eventhub-global-nav .eh-logo{font-family:'Outfit',Arial,sans-serif;font-weight:900;font-size:25px;color:#fff;text-decoration:none;white-space:nowrap}
+#eventhub-global-nav .eh-logo span{color:#a88bff}
+#eventhub-global-nav .eh-links{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+#eventhub-global-nav .eh-links a{font-size:13px;font-weight:700;color:#bcb8ce;text-decoration:none;padding:10px 13px;border-radius:9px;transition:background .2s}
+#eventhub-global-nav .eh-links a:hover,#eventhub-global-nav .eh-links a[aria-current="page"]{background:#29213f;color:#d4c7ff}
+#eventhub-global-nav .eh-role{font-size:11px;color:#d4c7ff;background:#29213f;border:1px solid #594779;border-radius:30px;padding:8px 12px;font-weight:800;letter-spacing:.3px}
+/* Shared control styles -- restrict to normal portal areas, never the global navigation */
+body.eventhub-unified :is(button,.btn,.primary-btn,.secondary-btn):not(.close-btn){border-radius:10px;transition:filter .15s,transform .15s}
+body.eventhub-unified :is(button,.btn,.primary-btn,.secondary-btn):not(.close-btn):hover{filter:brightness(1.09)}
+body.eventhub-unified :is(input,select,textarea){border-radius:9px}
+/* Organiser: preserve the dashboard structure while matching the EventHub dark look */
+body.eventhub-unified[data-eh-portal="organiser"] .sidebar{top:72px;background:#141320!important;border-color:var(--eh-border)!important}
+body.eventhub-unified[data-eh-portal="organiser"] .main-content{background:var(--eh-bg)!important}
+body.eventhub-unified[data-eh-portal="organiser"] .sidebar .brand{color:white}
+body.eventhub-unified[data-eh-portal="organiser"] .sidebar .brand-icon{background:#a88bff;color:#10101a}
+body.eventhub-unified[data-eh-portal="organiser"] .sidebar .nav-item{color:#bcb8ce}
+body.eventhub-unified[data-eh-portal="organiser"] .sidebar .nav-item.active{color:#e3d9ff;background:#302445}
+body.eventhub-unified[data-eh-portal="organiser"] .sidebar .sidebar-bottom strong{color:#fff}
+body.eventhub-unified[data-eh-portal="organiser"] .welcome-card{background:linear-gradient(120deg,#48347b,#7d60cf)!important}
+body.eventhub-unified[data-eh-portal="organiser"] :is(.stat-card,.panel){background:var(--eh-surface)!important;color:#fff!important;border-color:var(--eh-border)!important}
+body.eventhub-unified[data-eh-portal="organiser"] :is(.panel p,.stat-card p,.stat-card small,.subtitle,.footnote,.panel-heading p,footer){color:var(--eh-muted)!important}
+body.eventhub-unified[data-eh-portal="organiser"] .toolbar input,body.eventhub-unified[data-eh-portal="organiser"] #eventForm input,body.eventhub-unified[data-eh-portal="organiser"] #eventForm select{background:var(--eh-raised);color:#fff;border:1px solid var(--eh-border)}
+body.eventhub-unified[data-eh-portal="organiser"] #eventForm{background:#29243d!important;color:#fff}
+body.eventhub-unified[data-eh-portal="organiser"] .btn-primary{background:#a88bff;color:#11101c}
+body.eventhub-unified[data-eh-portal="organiser"] .btn-dark{background:#343146;color:#fff}
+body.eventhub-unified[data-eh-portal="organiser"] th{background:#262339;color:#d4c7ff}
+body.eventhub-unified[data-eh-portal="organiser"] td{color:#efedf7}
+body.eventhub-unified[data-eh-portal="organiser"] th,body.eventhub-unified[data-eh-portal="organiser"] td{border-color:var(--eh-border)}
+body.eventhub-unified[data-eh-portal="organiser"] .notice{background:#29243d;color:#d4c7ff}
+body.eventhub-unified[data-eh-portal="organiser"] .notice.success{background:#173d34;color:#b6f6d9}
+body.eventhub-unified[data-eh-portal="organiser"] .notice.error{background:#4d232c;color:#ffb5c2}
+/* Venue manager: harmonise existing sections without affecting JS hooks */
+body.eventhub-unified[data-eh-portal="venues"] > header{background:linear-gradient(100deg,#1b1430,#30234e)!important;border-bottom:1px solid var(--eh-border)!important;color:#fff!important}
+body.eventhub-unified[data-eh-portal="venues"] :is(.dashboard,.venue-section,#venueFormSection){background:var(--eh-surface)!important;color:#fff!important;border:1px solid var(--eh-border)!important;box-shadow:none!important;border-radius:16px!important}
+body.eventhub-unified[data-eh-portal="venues"] :is(.dashboard,.venue-section,#venueFormSection) p{color:#bcb8ce!important}
+body.eventhub-unified[data-eh-portal="venues"] table th{background:#302445!important;color:#e4daff!important}
+body.eventhub-unified[data-eh-portal="venues"] table td{background:#1e1d2b!important;color:#eeeaf7!important;border-color:#383745!important}
+body.eventhub-unified[data-eh-portal="venues"] :is(input,textarea,select){background:var(--eh-raised);color:#fff;border:1px solid var(--eh-border)}
+body.eventhub-unified[data-eh-portal="venues"] :is(#addVenueBtn,button[type="submit"]){background:#a88bff!important;color:#161125!important}
+/* Ticket manager: dark EventHub frame, clean white modal for scannability */
+body.eventhub-unified[data-eh-portal="tickets"]>.topbar{background:#141320!important;color:#fff!important;border-bottom:1px solid var(--eh-border)!important}
+body.eventhub-unified[data-eh-portal="tickets"] .container{background:transparent!important}
+body.eventhub-unified[data-eh-portal="tickets"] .hero{background:linear-gradient(110deg,#322354,#735bcc)!important;color:white!important}
+body.eventhub-unified[data-eh-portal="tickets"] :is(.panel,.stat,.booking-card){background:#181824!important;color:#fff!important;border:1px solid #383745!important}
+body.eventhub-unified[data-eh-portal="tickets"] :is(.panel,.stat,.booking-card) .muted{color:#bbb7cd!important}
+body.eventhub-unified[data-eh-portal="tickets"] .dashboard-title,body.eventhub-unified[data-eh-portal="tickets"] .toolbar{color:#fff}
+body.eventhub-unified[data-eh-portal="tickets"] :is(input,select){background:#232333;color:#fff;border:1px solid #383745}
+body.eventhub-unified[data-eh-portal="tickets"] .primary-btn{background:#a88bff!important;color:#181125!important}
+body.eventhub-unified[data-eh-portal="tickets"] footer{color:var(--eh-muted)!important}
+/* QR dialog deliberately stays high-contrast for actual ticket scanning */
+@media(max-width:850px){body.eventhub-unified[data-eh-portal="organiser"] .sidebar{top:auto}#eventhub-global-nav{padding:12px 20px}#eventhub-global-nav .eh-links{width:100%;overflow-x:auto;flex-wrap:nowrap}}
